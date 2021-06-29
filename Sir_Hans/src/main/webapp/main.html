@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="styles/main.css">
+
+        <!--Leaflet css:-->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""/>
+
+        <link rel="stylesheet" href="./tagify-master/dist/tagify.css">
+        
+        <title>Sir Hans</title>
+    </head>
+
+    <body>
+
+        <div id="mapid"></div>
+
+        <!--All panels which are shown on the map:-->
+        <div id="interface">
+
+            <div id="buttons">
+
+                <div id ="circleButton">
+
+                    <div id="right">
+                        <button id="communityMapsB"></button>
+                        <button id="savedMapsB"></button>     
+                        <button id="placesListB"></button>
+                        <button id="userLocation"><i class="fa fa-thumb-tack" aria-hidden="true"></i></button>
+                    </div>
+
+                    <div id="left">
+                        <button id="researcher"></button>
+                        <button id="parameters"></button>
+                    </div>
+
+                </div>
+                
+                <button class="hoverL" id="addAPlaceB">+</button>
+
+            </div><!--End of buttons div-->
+            
+            <div class="overlay">
+                <div class="PopupMenu" id="addAPlaceMenu">
+                    <p>
+                        <form>
+                            <label id="OneMapMarker"><i class="fa fa-map-marker" aria-hidden="true"></i></label>
+                            <input name="place" type="text" class="AddNameInput" id="addNamePlace" placeholder="Name this place..." autocomplete=off>
+                            <textarea maxlength=255 name="description" class="AddDescriptionInput" id="addDescriptionPlace" placeholder="Describe this place..." rows=10 cols=72 autocomplete=off></textarea>
+                            <button class="CloseButton" type="reset">x</button>
+                            <label for="searchImages" id="addImages" class="picture-icon"><i class="fa fa-picture-o" aria-hidden="true"></i></label>
+                            <input type="file" id="searchImages" 
+                                               accept="image/png,image/jpeg" 
+                                               style="visibility: hidden;"
+                                               multiple>
+
+                            <img src="" id="image-test">
+                            
+                            
+                            <h2>Tags :</h2>
+
+                            <input type="textarea" id="addAPlaceTags" class="Scrollbar addAPlaceTagify" placeholder="Add a tag...">
+                            
+                            
+                            <script id="templateAddPlaceTags" type="text/template">
+                                <button class="ANewTagButton" type="button"> <%=addOneTagName %> </button>
+                            </script>
+
+
+                            <select name="mapChoice" class="PopupChoice" id="mapChoicePlace" placeholder="Choose a map" required>
+                                <option value="CAMap">--- Choose a map ---</option>
+                            </select>
+                            <!--Below: The template for the div above-->
+                            <script id="templateMapChoicePlace" type="text/template">
+                                <option value= <%= valueMapChose %> > <%= nameMap %> </option>
+                            </script>
+                   
+                            <button class="createOkButton" id="editPlace" type="reset">Ok</button>
+                        </form>
+                    </p>
+                </div>
+
+                <div class="PopupMenu" id="addAMapMenu"> 
+                    <p>
+                        <form>
+                            <input name="map" type="text" class="AddNameInput" id="addNameMap" placeholder="Name this map..." autocomplete=off required>
+                            <textarea maxlength=255 name="description" class="AddDescriptionInput" id="addDescriptionMap" placeholder="Describe this map..." rows=10 cols=72 autocomplete=off></textarea>
+                            <button class="CloseButton" type="reset">x</button>
+                            <select name="confidentiality" class="PopupChoice" id="confidentialityChoiceMap" placeholder="confidentiality" required>
+                                <option value="PRIVATE">Private</option>
+                                <option value="PUBLIC">Public</option>                     
+                            </select>
+                            <button class="createOkButton" id="editMap" type="reset">Ok</button>
+                        </form>
+                    </p>
+
+                </div>
+
+                <div class="small-modal" >
+                    <button class="CloseButton" type="reset">x</button>
+                    <br>&nbsp;&nbsp;
+                    <label for="share-map">Find your friend with his name!</label>
+                    <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" class="searchInput" id="share-map-user-name">&nbsp;&nbsp;&nbsp; <button class="searchInputButton" id="searchUsersButton"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    <br><br>
+                    <div id="user-list" class="Scrollbar users-list"></div>
+                    <script id="templateUserList" type="text/template">
+                        <p class='OneDivLeft' id= <%= oneUserButtonId %>>
+                            <label class='OneDivLeftL'> <%= nameUser %> </label>
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i> 
+                        </p>
+                    </script>
+                    <button id="small-modal-done" class="modal-done">I'm done!</button>
+
+                </div>
+
+            </div>
+         
+            <!------------ all RightSlidingPanels:--------------->
+
+            <div class="Menu RightSlidingPanel" id="communityMapsMenu">
+                <div class="titleBox">
+                    <a class="sizeIcon2"><i class="fa fa-globe" aria-hidden="true"></i></a>
+                    <h1 id="communityh1">Community Maps</h1>
+                </div>
+                <br><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="text" class="searchInput" id="searchMapInput">&nbsp;&nbsp;&nbsp;
+                <button class="searchInputButton" id="searchMapButton"><i class="fa fa-search" aria-hidden="true"></i></button>
+                <div id="communityMapsButtons" class="Scrollbar fullScrollbarRight"></div>
+                <!--Below: the script for the div above!-->
+                <script id="templateOneCommunityMapButton" type="text/template">
+                    <p class='OneDiv' id= <%= oneCommunityMapButtonId %>>
+                        <label class='OneDivL'> <%= nameMap %> </label>
+                      <i class="fa fa-angle-right"></i>
+                    </p>
+                </script>
+
+
+                <button class="RightSlidingPanelQuit" id="communityMapsMenuQuit"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+            </div>
+        
+            <div class="Menu RightSlidingPanel" id="savedMapsMenu">
+                <div class="titleBox">
+                    <a class="sizeIcon2"><i class="fa fa-map"></i></a>
+                    <h1> My Maps</h1>
+                </div>
+                <div id="savedMapsButtons" class="Scrollbar fullScrollbarRight">
+                    <!--Here are dynamically added the maps of the current user-->              
+                </div>
+                <!--Below: the script for the div above!-->
+                <script id="templateSavedMapsButton" type="text/template">
+
+                    <p class='OneDivSMM' id= <%= oneMapDivId %> >
+                        <input type='checkbox' id= <%= checkBoxMapId %>  <%= checked %> />
+                        <label for= <%= checkBoxMapId %> > <span class='spanLabel'></span> <%= nameMap %> </label>
+                        <button class='buttonShowsDetails' id= <%= buttonOneMapMenuId %> >  > </button>
+                    </p>
+
+                </script>
+
+                <button class="btn-bottom addButton" id="addAMapB"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                <button class="RightSlidingPanelQuit" id="savedMapsMenuQuit" ><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+
+                
+            </div>
+
+            <div class="Menu RightSlidingPanel" id="placesListMenu">
+                <div class="titleBox">
+                    <a class="sizeIcon2"><i class="fa fa-map-marker" aria-hidden="true"></i></a>
+                    <h1>My Places</h1>
+                </div>    
+                <div id="placesListButtons" class="Scrollbar fullScrollbarRight"></div>
+
+                <!--Below: the script for the div above!-->
+                <script id="templateOnePlaceButton" type="text/template">
+                    <p class='OneDiv' id= <%= onePlaceButtonId %>>
+                        <label class='OneDivL'> <%= namePlace %> </label>
+                        <i class="fa fa-angle-right"></i>
+                    </p>
+                </script>
+
+                <button class="RightSlidingPanelQuit" id="placesListMenuQuit"><i class="fa fa-angle-right" aria-hidden="true"></i></button>            
+            </div>
+            
+            <div class="Menu RightSlidingPanel" id="onePlaceMenu">
+                <div class="titleBox Scrollbar">
+                    <a class="sizeIcon2"><i class="fa fa-map-marker"></i></a>
+                    <h1 id="nameOnePlaceMenu"></h1>  
+                </div>     
+
+                <div class="Scrollbar fullScrollbarRight">
+                    <br>
+                    <textarea class="descriptionArea" rows=8 cols=32 disabled><!--Description of the place:--></textarea>
+                    <br>
+                    <textarea id="onePlaceTags" readOnly class="Scrollbar"></textarea>
+
+                    <div id="onePlaceImages"></div>
+                    <script id="templateOnePlaceImages" type="text/template">
+                        <img class="image-resized" src= <%= onePlaceImageSrc %>  id= <%= onePlaceImageId %> >
+                    </script>
+
+                    <h3>Comments:
+                        <button id="addAMessageButton"><i class="fa fa-commenting" aria-hidden="true"></i></button>
+                    </h3>
+                    <br/>           
+                    
+                    <div id="addAMessageDiv"></div>
+                    <script id="templateOnePlaceAddAMessage" type="text/template">
+                        <textarea id="addAMessageTextarea" class="Scrollbar" cols="32" rows="4"></textarea>
+                        <button class="sendButton" id="onePlaceSendMessage"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    </script>
+
+                    <div id="onePlaceMessages"></div>
+                    <script id="templateOnePlaceMessages" type="text/template">
+                            <textarea class="oneMessageTextarea Scrollbar" id= <%= oneMessageTextareaId %> cols="32" rows="4" disabled>
+                            </textarea>   
+                    </script>
+
+                    <script id="templatePopup" type="text/template">
+                        <b> <%= namePlace %> </b>
+                        <br>
+                        <img class="small-image" src= <%= imgSrc %> >
+                    </script>
+
+                </div>
+
+                <button class="btn-bottom delButton" id="removePlace"><i class="fa fa-trash-o"></i></button>
+                <button class="btn-bottom modifyButton" id="modifyPlace"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                <button class="btn-bottom-circle" id="centerToMarkerPlaceButton"><i class="fa fa-location-arrow"></i></button>
+                <button class="btn-bottom" id="goToGoogleMapButton"><i class="fa fa-plane" aria-hidden="true"></i></button>
+                <button class="RightSlidingPanelQuit" id="onePlaceMenuQuit"><i class="fa fa-angle-right" aria-hidden="true"></i></button> 
+            </div>
+
+            <div class="Menu RightSlidingPanel" id="oneMapMenu"> 
+                <div class="titleBox">
+                    <a class="sizeIcon2"><i class="fa fa-map-marked"></i></a>
+                    <h1><span id="nameOneMapMenu"></span></h1>  
+                </div>      
+                
+                <div class="Scrollbar fullScrollbarRight">
+                    <textarea class="descriptionArea" rows=8 cols=32 disabled id="descriptionOneMapMenu"><!--Description of the map:--></textarea>
+                    <h3 id="oneMapConfidentiality"></h3>
+                    <button class='btn-share' id="oneMapMenuShareButton"><i class="fa fa-share-alt"></i></button>
+    
+                    <!--list of places of this map-->
+                    <div id="oneMapPlaces"></div>
+                    <script id="templateOneMapPlaces" type="text/template">
+                        <p class='OneDiv' id= <%= buttonOnePlaceMenuId %>>
+                            <label class='OneDivL'> <%= namePlace %> </label>
+                            <i class="fa fa-angle-right"></i>
+                        </p>
+                    </script>
+                </div>
+
+                <button class="btn-bottom delButton" id="removeMap"><i class="fa fa-trash-o"></i></button>
+                <button class="btn-bottom modifyButton" id="modifyMap"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                <button class="btn-bottom addButton" id="followMap">Follow</button>
+                <button class="RightSlidingPanelQuit" id="oneMapMenuQuit"><i class="fa fa-angle-right" aria-hidden="true"></i></button> 
+            </div>
+
+
+            <!------------- all LeftSlidingPanels:----------------->
+
+            <div class="Menu LeftSlidingPanel" id="searchingPlacesMenu">
+                <div class="titleBoxL">
+                    <a class="sizeIcon2"><i class="fa fa-search" aria-hidden="true"></i></a>
+                    <h1>Search</h1>
+                </div>
+                <div class="Scrollbar fullScrollbarLeft">
+                    <h2>Your tags:</h2>
+                    <textarea id="searchingPlacesTags" class="researcherTags"></textarea>
+                    <br>
+                    <button id="searchByTagsButton" >Search nearby <i class="fa fa-search" aria-hidden="true"></i></button>
+                    <br>
+                    <br>
+                    <div id="placesFound">
+
+                    </div>
+                
+                </div>
+
+                <button class="LeftSlidingPanelQuit" id="searchingPlacesMenuQuit"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+
+            </div>
+
+            <div class="Menu LeftSlidingPanel" id="parametersMenu">
+                <div class="titleBoxL">
+                    <a class="sizeIcon2"><i class="fa fa-cog" aria-hidden="true"></i></a>
+                    <h1>Parameters</h1>
+                </div>
+
+                <div class="Scrollbar fullScrollbarLeft">
+
+                    <h3>Your identity:</h3>
+
+                    <div class="sizeIcon1" ><i class="fa fa-user-circle" aria-hidden="true"></i><p class="inline" id="userIdendityDiv"></p></div>
+                    
+                    <h3>Map shared by other users:</h3>
+                    <div id="mapsSharedDiv"></div>
+
+                    <script id="templateMapsSharedDiv" type="text/template">
+                        <p class='OneDivSmallLeft' id= <%= oneMapSharedId %> >
+                            <label class='labelOneDivLeft'><%= nameMap %></label>
+                            <button class='oneMapSharedFollowButton' id= <%= oneMapSharedFollowButtonId %> > <i class="fa fa-share" aria-hidden="true"></i> </button>
+                            <button class='oneMapSharedIgnoreButton' id= <%= oneMapSharedIgnoreButtonId %> > <i class="fa fa-close" aria-hidden="true"></i> </button>
+                        </p>
+                    </script>
+
+                </div>
+
+                <button class='RedButton' id="disconnectButton">Logout</button>
+                <button class="LeftSlidingPanelQuit" id="parametersMenuQuit"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+            </div>
+
+
+
+        
+        </div> <!--End of interface div-->
+
+	    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+        
+        <!--Leaflet javascript:-->
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+
+        <!--To get the font awesome !!-->
+        <script src="https://use.fontawesome.com/ba7c0f482b.js"></script>
+
+        <!-- To get the tags input plugin !!-->
+        <script type="text/javascript" src="tagify-master/dist/jQuery.tagify.min.js"></script>
+        <script type="text/javascript" src="tagify-master/dist/tagify.min.js"></script>
+        <script type="text/javascript" src="tagify-master/dist/tagify.polyfills.min.js"></script>
+
+        <script type="text/javascript" src="scripts/main.js"></script>
+
+    </body>
+</html>
+
+

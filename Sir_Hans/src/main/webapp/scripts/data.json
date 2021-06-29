@@ -1,0 +1,26 @@
+
+[
+{ 
+/*list of discussion*/
+
+	"id":"1"
+	"thematics":"Science"
+	"question":"Comment se forment les orages ?" 
+	"list of answers":{"Il me semble que c'est dû à l'accumulation d'énergie...","Acune idée","Se sont le fruit de décharges électriques dont la majorité ont lieu à l’intérieur d’un nuage d’orage ou entre nuages. Seuls 20 % de ces ponts électriques se font entre le nuage et le sol pour donner la foudre."}
+	 
+	"id":"2"
+	"thematics":"Littérature"
+	"question":"Quelqu'un pourrait résumer le roman de Emile Zola, Germinal svp ? " 
+	"list of answers":{"Je l'ai pas lu sorry!","Se sont des miniers qui ont la vie dure.","Un jeune chômeur, Etienne Lantier, se fait embaucher aux mines de Montsou, dans le nord de la France. Il fait connaissance avec une famille de mineurs, les Maheu, et tombe amoureux de leur fille Catherine ; Mais celle-ci, qui n'est pas insensible à Etienne, est la maîtresse d'un ouvrier brutal, Chaval."}
+	 
+	 "id":"3"
+	"thematics":"Sport"
+	"question":"Quel est la personne qui est restée le plus longtemps sans dormir ? " 
+	"list of answers":{"Moi ! XD", "Jusqu’en mai 2007, l’Américain Randy Gardner détenait le record du monde de privation de sommeil depuis plus de 40 ans avec 264 heures d’éveil. Mais depuis, le titre est revenu au Britannique Tony Wright qui, alors âgé de 42 ans, a tenu 266 heures sans dormir. Bien que ces recordmen n’aient souffert d’aucune conséquence physiologique ni neurologique, les médecins s’accordent à dire qu’une aussi longue privation conduit à des dysfonctionnements cognitifs."}
+	
+
+}
+]
+
+
+

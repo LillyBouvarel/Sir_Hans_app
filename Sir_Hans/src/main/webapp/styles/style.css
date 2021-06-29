@@ -1,0 +1,37 @@
+
+body{
+	background-color: black;
+}
+h1{ 
+	color: white;
+	text-align: center;
+	font-size: 500%;
+	
+ }
+ h2{
+ 	color: white;
+ 	text-align: center;
+ 	font-size: 200%;
+ }
+nav{ 
+	position: fixed;
+  	width: 100%;
+  	top: 300px;
+  	right: 600px;
+  	
+ }
+
+ #search{
+
+ 	border: 1px solid black;
+ 	margin-top: 15px;
+ 	margin-left:80%;
+ 	border-top-left-radius: 20px;
+ 	border-bottom-left-radius: 20px;
+ }
+div{
+	position: fixed;
+	width:50%;
+  	top: 0px;
+  	right: -550px;
+}
